@@ -1,0 +1,32 @@
+{
+  "name": "gsn_server",
+  "version": "1.0.0",
+  "description": "Backend to the social network web application for gamers",
+  "main": "app.js",
+  "scripts": {
+    "server": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasfrsi/gsn_server"
+  },
+  "author": "Lucas F. Simoni",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.0",
+    "multer": "^1.4.2",
+    "normalize-url": "^5.0.0",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.21.2",
+    "nodemon": "^2.0.4"
+  }
+}
