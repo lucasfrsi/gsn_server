@@ -4,6 +4,7 @@
   "description": "Backend to the social network web application for gamers",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "server": "nodemon app.js"
   },
   "repository": {
