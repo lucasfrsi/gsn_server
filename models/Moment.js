@@ -34,7 +34,7 @@ const momentSchema = new Schema({
       },
     },
   ],
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
     required: true,
