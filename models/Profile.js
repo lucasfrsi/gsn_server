@@ -9,6 +9,9 @@ const profileSchema = new Schema({
     required: true,
   },
   personalData: {
+    realName: {
+      type: String,
+    },
     location: {
       type: String,
     },
@@ -44,6 +47,12 @@ const profileSchema = new Schema({
       },
     },
     bio: {
+      type: String,
+    },
+    firstGame: {
+      type: String,
+    },
+    favoriteGame: {
       type: String,
     },
   },

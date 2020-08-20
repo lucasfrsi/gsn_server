@@ -4,7 +4,11 @@ const db = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${pr
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(db, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
     console.log('Connected to MongoDB Atlas.');
   } catch (err) {
     console.error('An error occurred while trying to connect to MongoDB Atlas:', err.message);

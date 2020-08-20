@@ -3,7 +3,7 @@ const express = require('express');
 const connectDB = require('./config/connectDB');
 const { createError, handleError } = require('./middleware/helpers/error');
 
-const usersRoutes = require('./routes/api/users');
+const usersRoutes = require('./routes/api/usersRoutes');
 
 // Create an Express Application
 const app = express();

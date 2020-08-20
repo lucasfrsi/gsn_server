@@ -11,14 +11,16 @@ const createError = (statusCode, message) => {
 };
 
 const handleError = (err, res, next) => {
-  const { statusCode, message } = err;
   if (res.headersSent) {
     return next(err);
   }
+
+  const { statusCode, message } = err;
+
   res.status(statusCode || 500);
   res.json({
     statusCode: statusCode || 500,
-    msg: message || 'An unknown server error occurred.',
+    message: message || 'An unknown error occurred.',
   });
 };
 
