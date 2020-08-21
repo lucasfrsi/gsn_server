@@ -2,9 +2,9 @@ const { createError } = require('../middleware/helpers/error');
 
 const User = require('../models/User');
 
-const getUserBy = async (query) => {
+const getUserBy = async (query, select) => {
   try {
-    const user = await User.findOne(query);
+    const user = await User.findOne(query).select(select);
     return user;
   } catch (err) {
     console.error(err);
