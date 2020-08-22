@@ -11,7 +11,7 @@ router.use(isAuthorized);
 
 // Private Routes
 router.post('/', momentsControllers.createMoment);
-// DELETE MOMENT(get it by id) (only the user can do it)
+router.delete('/:momentId', momentsControllers.deleteMoment);
 // REACT A MOMENT(get it by id) (react once. if same react remove, if different type just change)
 // GET MOMENTS (show at home)
 
