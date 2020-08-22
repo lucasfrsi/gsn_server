@@ -18,7 +18,7 @@ const createMoment = async (moment, user) => {
     console.error(err);
     await session.abortTransaction();
     session.endSession();
-    throw createError(500, 'Something went wrong while saving the user, try again later.');
+    throw createError(500, 'Something went wrong while creating the moment, try again later.');
   }
 };
 
