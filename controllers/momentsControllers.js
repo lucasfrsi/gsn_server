@@ -3,6 +3,8 @@ const { createError } = require('../middleware/helpers/error');
 const momentsServices = require('../services/momentsServices');
 const usersServices = require('../services/usersServices');
 
+const REACTION_TYPES = ['like', 'love', 'wow', 'anger'];
+
 const createMoment = async (req, res, next) => {
   const { title, text, imageUrl } = req.body;
   const userId = req.user.id;
@@ -51,5 +53,45 @@ const deleteMoment = async (req, res, next) => {
   res.status(200).json({ message: 'Moment has been deleted successfully' });
 };
 
+const reactMoment = async (req, res, next) => {
+  const { momentId } = req.params;
+  const { user } = req;
+  const { reactionType } = req.body;
+
+  let moment;
+
+  try {
+    if (!reactionType) throw createError(400, 'No reaction type attached to the request.');
+    if (!REACTION_TYPES.includes(reactionType)) throw createError(400, 'There is no such reaction type.');
+    moment = await momentsServices.getMomentById(momentId);
+    if (!moment) throw createError(400, 'Moment does not exist, could not react to this moment.');
+    const existingReaction = moment.reactions.filter((reaction) => reaction.user.toString() === user.id);
+
+    if (existingReaction.length < 1) {
+      const newReaction = {
+        user: user.id,
+        type: reactionType,
+      };
+      const updatedMoment = await momentsServices.addReactionToMoment(moment, newReaction);
+      res.status(201).json({ message: 'Moment reaction has been added successfully', moment: updatedMoment });
+    } else {
+      if (existingReaction[0].type === reactionType) {
+        await momentsServices.deleteMomentReaction(moment, existingReaction[0]);
+        res.status(200).json({ message: 'Moment reaction has been deleted.' });
+      }
+
+      if (existingReaction[0].type !== reactionType) {
+        const updatedMoment = await momentsServices.changeMomentReaction(moment, reactionType, user.id);
+        res.status(200).json({ message: 'Moment reaction has been changed successfully', moment: updatedMoment });
+      }
+    }
+  } catch (err) {
+    return next(err);
+  }
+};
+
+// GET MOMENTS (show at home)
+
 exports.createMoment = createMoment;
 exports.deleteMoment = deleteMoment;
+exports.reactMoment = reactMoment;

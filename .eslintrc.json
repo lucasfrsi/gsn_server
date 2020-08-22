@@ -12,6 +12,7 @@
     "rules": {
       "no-console": "off",
       "consistent-return": "off",
-      "import/newline-after-import": "off"
+      "import/newline-after-import": "off",
+      "max-len": "off"
     }
 }

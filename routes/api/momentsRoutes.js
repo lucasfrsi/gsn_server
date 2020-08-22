@@ -10,9 +10,9 @@ const momentsControllers = require('../../controllers/momentsControllers');
 router.use(isAuthorized);
 
 // Private Routes
+// router.get('/', momentsControllers.getMoments);
 router.post('/', momentsControllers.createMoment);
+router.post('/react/:momentId', momentsControllers.reactMoment);
 router.delete('/:momentId', momentsControllers.deleteMoment);
-// REACT A MOMENT(get it by id) (react once. if same react remove, if different type just change)
-// GET MOMENTS (show at home)
 
 module.exports = router;
