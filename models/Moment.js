@@ -18,7 +18,7 @@ const momentSchema = new Schema({
     required: true,
     maxlength: 150,
   },
-  image: {
+  imageUrl: {
     type: String,
   },
   reactions: [

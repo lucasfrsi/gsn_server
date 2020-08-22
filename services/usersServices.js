@@ -2,6 +2,16 @@ const { createError } = require('../middleware/helpers/error');
 
 const User = require('../models/User');
 
+const getUsers = async (query, select) => {
+  try {
+    const users = await User.find(query).select(select);
+    return users;
+  } catch (err) {
+    console.error(err);
+    throw createError(500, 'Something went wrong while fetching users, try again later.');
+  }
+};
+
 const getUserBy = async (query, select) => {
   try {
     const user = await User.findOne(query).select(select);
@@ -33,6 +43,7 @@ const createUser = async (user) => {
   }
 };
 
+exports.getUsers = getUsers;
 exports.getUserBy = getUserBy;
 exports.getUserById = getUserById;
 exports.createUser = createUser;

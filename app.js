@@ -4,6 +4,7 @@ const connectDB = require('./config/connectDB');
 const { createError, handleError } = require('./middleware/helpers/error');
 
 const usersRoutes = require('./routes/api/usersRoutes');
+const momentsRoutes = require('./routes/api/momentsRoutes');
 
 // Create an Express Application
 const app = express();
@@ -14,13 +15,14 @@ app.use(express.json());
 // Set Headers and allow CORS
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
 // Routes
 app.use('/api/users', usersRoutes);
+app.use('/api/moments', momentsRoutes);
 
 // 404 Route
 app.use(() => {

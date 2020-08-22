@@ -3,15 +3,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  nickname: {
-    type: String,
-    required: true,
-    maxlength: 24,
-  },
   email: {
     type: String,
     required: true,
-    unique: true,
+    select: false,
   },
   password: {
     type: String,
@@ -19,17 +14,83 @@ const userSchema = new Schema({
     minlength: 8,
     select: false,
   },
+  nickname: {
+    type: String,
+    required: true,
+    maxlength: 24,
+  },
   avatar: {
     type: String,
   },
-  createdAt: {
-    type: Date,
-    required: true,
-    default: Date.now,
-  },
   profile: {
-    type: Schema.Types.ObjectId,
-    ref: 'Profile',
+    personalData: {
+      realName: {
+        type: String,
+      },
+      location: {
+        type: String,
+      },
+      bio: {
+        type: String,
+      },
+    },
+    gamerData: {
+      kind: {
+        type: String,
+      },
+      streamer: {
+        type: Boolean,
+      },
+      platforms: {
+        type: [String],
+      },
+      gameMode: {
+        type: [String],
+      },
+      payModel: {
+        type: [String],
+      },
+      genres: {
+        type: [String],
+      },
+      twitchChannel: {
+        owner: {
+          type: Boolean,
+        },
+        link: {
+          type: String,
+        },
+      },
+      bio: {
+        type: String,
+      },
+      firstGame: {
+        type: String,
+      },
+      favoriteGame: {
+        type: String,
+      },
+    },
+    social: {
+      facebook: {
+        type: String,
+      },
+      twitter: {
+        type: String,
+      },
+      instagram: {
+        type: String,
+      },
+      youtube: {
+        type: String,
+      },
+      twitch: {
+        type: String,
+      },
+      patreon: {
+        type: String,
+      },
+    },
   },
   moments: [
     {
@@ -43,6 +104,6 @@ const userSchema = new Schema({
       ref: 'Post',
     },
   ],
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,9 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const isAuthorized = require('../../middleware/authorization');
 
-const userControllers = require('../../controllers/userControllers');
+const usersControllers = require('../../controllers/usersControllers');
 
-router.post('/login', userControllers.login);
-router.post('/signup', userControllers.signUp);
+// Public Routes
+router.post('/login', usersControllers.login);
+router.post('/signup', usersControllers.signUp);
+
+router.use(isAuthorized);
+
+// Private Routes
+// router.get('/search/:query', userControllers.getUsersByNickname);
+// router.get('/:id', userControllers.getUserById);
 
 module.exports = router;

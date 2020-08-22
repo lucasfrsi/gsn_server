@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const { createError } = require('../middleware/helpers/error');
 
-const userServices = require('../services/userServices');
+const usersServices = require('../services/usersServices');
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -13,7 +13,7 @@ const login = async (req, res, next) => {
 
   // Check if the user exists with the email
   try {
-    user = await userServices.getUserBy({ email }, '+password');
+    user = await usersServices.getUserBy({ email }, '+password');
     if (!user) throw createError(401, "The email you've entered doesn't match any account, please try again.");
   } catch (err) {
     return next(err);
@@ -66,9 +66,9 @@ const signUp = async (req, res, next) => {
   // Check if nickname or email are already in use
   try {
     let user;
-    user = await userServices.getUserBy({ nickname });
+    user = await usersServices.getUserBy({ nickname });
     if (user) throw createError(400, 'Nickname already in use.');
-    user = await userServices.getUserBy({ email });
+    user = await usersServices.getUserBy({ email });
     if (user) throw createError(400, 'Email already in use.');
   } catch (err) {
     return next(err);
@@ -90,7 +90,7 @@ const signUp = async (req, res, next) => {
       email,
       password: hashedPassword,
     };
-    createdUser = await userServices.createUser(user);
+    createdUser = await usersServices.createUser(user);
   } catch (err) {
     return next(createError(500, 'Signing up failed, please try again later.'));
   }
@@ -111,6 +111,30 @@ const signUp = async (req, res, next) => {
   }
 };
 
+const getUsersByNickname = async (req, res, next) => {
+  const { query } = req.params;
+  console.log(query);
+  if (!query) return next();
+  try {
+    const users = await usersServices.getUsers({ nickname: { $regex: query, $options: 'i' } });
+    res.status(200).json(users);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const getUserById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await usersServices.getUserById(id);
+    res.status(200).json(user);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 // Exports
 exports.login = login;
 exports.signUp = signUp;
+exports.getUsersByNickname = getUsersByNickname;
+exports.getUserById = getUserById;
