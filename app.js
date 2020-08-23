@@ -1,10 +1,11 @@
-require('dotenv').config();
+require('dotenv').config({ path: './config/.env' });
 const express = require('express');
 const connectDB = require('./config/connectDB');
 const { createError, handleError } = require('./middleware/helpers/error');
 
 const usersRoutes = require('./routes/api/usersRoutes');
 const momentsRoutes = require('./routes/api/momentsRoutes');
+const postsRoutes = require('./routes/api/postsRoutes');
 
 // Create an Express Application
 const app = express();
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/users', usersRoutes);
 app.use('/api/moments', momentsRoutes);
+app.use('/api/posts', postsRoutes);
 
 // 404 Route
 app.use(() => {

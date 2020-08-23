@@ -6,7 +6,7 @@ const usersControllers = require('../../controllers/usersControllers');
 
 // Public Routes
 router.post('/login', usersControllers.login);
-router.post('/signup', usersControllers.signUp);
+router.post('/signup', usersControllers.signUp); // Allocate both login and signup to a route - controller - service structure logic
 
 router.use(isAuthorized);
 
