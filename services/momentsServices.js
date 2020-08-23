@@ -84,9 +84,20 @@ const changeMomentReaction = async (moment, reactionType, userId) => {
   }
 };
 
+const getMoments = async (sort, limit) => {
+  try {
+    const moments = await Moment.find({}).sort(sort).limit(limit);
+    return moments;
+  } catch (err) {
+    console.error(err);
+    throw createError(500, 'Something went wrong while fetching moments, try again later.');
+  }
+};
+
 exports.createMoment = createMoment;
 exports.getMomentById = getMomentById;
 exports.deleteMoment = deleteMoment;
 exports.addReactionToMoment = addReactionToMoment;
 exports.deleteMomentReaction = deleteMomentReaction;
 exports.changeMomentReaction = changeMomentReaction;
+exports.getMoments = getMoments;

@@ -76,8 +76,8 @@ const reactMoment = async (req, res, next) => {
       res.status(201).json({ message: 'Moment reaction has been added successfully', moment: updatedMoment });
     } else {
       if (existingReaction[0].type === reactionType) {
-        await momentsServices.deleteMomentReaction(moment, existingReaction[0]);
-        res.status(200).json({ message: 'Moment reaction has been deleted.' });
+        const updatedMoment = await momentsServices.deleteMomentReaction(moment, existingReaction[0]);
+        res.status(200).json({ message: 'Moment reaction has been deleted.', moment: updatedMoment });
       }
 
       if (existingReaction[0].type !== reactionType) {
@@ -90,8 +90,17 @@ const reactMoment = async (req, res, next) => {
   }
 };
 
-// GET MOMENTS (show at home)
+const getMoments = async (req, res, next) => {
+  let moments;
+  try {
+    moments = await momentsServices.getMoments('-createdAt', 3);
+    res.status(200).json({ moments });
+  } catch (err) {
+    return next(err);
+  }
+};
 
 exports.createMoment = createMoment;
 exports.deleteMoment = deleteMoment;
 exports.reactMoment = reactMoment;
+exports.getMoments = getMoments;

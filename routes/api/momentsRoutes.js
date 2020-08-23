@@ -10,7 +10,7 @@ const momentsControllers = require('../../controllers/momentsControllers');
 router.use(isAuthorized);
 
 // Private Routes
-// router.get('/', momentsControllers.getMoments);
+router.get('/', momentsControllers.getMoments);
 router.post('/', momentsControllers.createMoment);
 router.post('/react/:momentId', momentsControllers.reactMoment);
 router.delete('/:momentId', momentsControllers.deleteMoment);
