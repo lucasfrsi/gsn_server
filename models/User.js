@@ -38,9 +38,6 @@ const userSchema = new Schema({
       kind: {
         type: String,
       },
-      streamer: {
-        type: Boolean,
-      },
       platforms: {
         type: [String],
       },
@@ -54,7 +51,7 @@ const userSchema = new Schema({
         type: [String],
       },
       twitchChannel: {
-        owner: {
+        streamer: {
           type: Boolean,
         },
         link: {

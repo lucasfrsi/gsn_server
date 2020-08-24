@@ -43,7 +43,18 @@ const createUser = async (user) => {
   }
 };
 
+const updateProfile = async (id, update, options) => {
+  try {
+    const updatedProfile = await User.findByIdAndUpdate(id, update, options);
+    return updatedProfile;
+  } catch (err) {
+    console.error(err);
+    throw createError(500, "Something went wrong while updating user's profile, try again later.");
+  }
+};
+
 exports.getUsers = getUsers;
 exports.getUserBy = getUserBy;
 exports.getUserById = getUserById;
 exports.createUser = createUser;
+exports.updateProfile = updateProfile;

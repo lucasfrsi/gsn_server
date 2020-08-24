@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const normalize = require('normalize-url');
 
 const { createError } = require('../middleware/helpers/error');
 
@@ -133,8 +134,89 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+const updateProfile = async (req, res, next) => {
+  const { user } = req;
+  const {
+    avatar,
+    realName,
+    location,
+    bio,
+    kind,
+    platforms,
+    gameMode,
+    payModel,
+    genres,
+    streamer,
+    link,
+    gamerBio,
+    firstGame,
+    favoriteGame,
+    facebook,
+    twitter,
+    instagram,
+    youtube,
+    twitch,
+    patreon,
+  } = req.body;
+
+  const newProfile = {
+    avatar,
+    profile: {
+      personalData: {
+        realName,
+        location,
+        bio,
+      },
+      gamerData: {
+        kind,
+        platforms,
+        gameMode,
+        payModel,
+        genres,
+        twitchChannel: {
+          streamer,
+          link,
+        },
+        bio: gamerBio,
+        firstGame,
+        favoriteGame,
+      },
+      social: {
+        facebook,
+        twitter,
+        instagram,
+        youtube,
+        twitch,
+        patreon,
+      },
+    },
+  };
+
+  try {
+    // VALIDATE: kind, platforms, gameMode and payModel fields (also streamer)
+    // field: Array.isArray(field) ? field : field.split(',').map((field) => ' ' + field.trim())
+
+    // Normalize All Links
+    if (avatar && avatar.length > 0) newProfile.avatar = normalize(avatar, { forceHttps: true });
+
+    if (link && link.length > 0) newProfile.profile.gamerData.twitchChannel[link] = normalize(link, { forceHttps: true });
+
+    Object.entries(newProfile.profile.social).forEach(([key, value]) => {
+      if (value && value.length > 0) newProfile.profile.social[key] = normalize(value, { forceHttps: true });
+    });
+
+    // Supposing everything is ok, insert to DB
+    const updatedProfile = await usersServices.updateProfile(user.id, newProfile, { new: true });
+
+    res.status(200).json({ message: 'User profile has been updated successfully.', updatedProfile });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 // Exports
 exports.login = login;
 exports.signUp = signUp;
 exports.getUsersByNickname = getUsersByNickname;
 exports.getUserById = getUserById;
+exports.updateProfile = updateProfile;
