@@ -2,9 +2,6 @@ const jwt = require('jsonwebtoken');
 const { createError } = require('./helpers/error');
 
 module.exports = (req, res, next) => {
-  // if (req.method === 'OPTIONS') {
-  //   return next();
-  // }
   try {
     // Check if Authorization: 'Bearer TOKEN'
     const token = req.headers.authorization.split(' ')[1];

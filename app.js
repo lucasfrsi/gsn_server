@@ -3,6 +3,7 @@ const express = require('express');
 const connectDB = require('./config/connectDB');
 const { createError, handleError } = require('./middleware/helpers/error');
 
+const authRoutes = require('./routes/api/authRoutes');
 const usersRoutes = require('./routes/api/usersRoutes');
 const momentsRoutes = require('./routes/api/momentsRoutes');
 const postsRoutes = require('./routes/api/postsRoutes');
@@ -15,13 +16,19 @@ app.use(express.json());
 
 // Set Headers and allow CORS
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.status(200).send();
+    // Workaround for now, instead of using a CORS package or implementing it according to CORS specifications
+  } else {
+    next();
+  }
 });
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/moments', momentsRoutes);
 app.use('/api/posts', postsRoutes);

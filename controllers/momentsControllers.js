@@ -44,7 +44,7 @@ const deleteMoment = async (req, res, next) => {
   try {
     moment = await momentsServices.getMomentById(momentId, 'user', 'moments');
     if (!moment) throw createError(400, 'Moment does not exist, could not delete moment.');
-    if (moment.user.id !== user.id) throw createError(401, 'You are not allowed to delete this moment');
+    if (moment.user.id !== user.id) throw createError(403, 'You are not allowed to delete this moment');
     await momentsServices.deleteMoment(moment);
   } catch (err) {
     return next(err);

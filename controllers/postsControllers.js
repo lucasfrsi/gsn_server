@@ -56,7 +56,7 @@ const deletePost = async (req, res, next) => {
   try {
     const post = await postsServices.getPostById(postId, 'user', 'posts');
     if (!post) throw createError(400, 'Post does not exist, could not delete post.');
-    if (post.user.id !== user.id) throw createError(401, 'You are not allowed to delete this post');
+    if (post.user.id !== user.id) throw createError(403, 'You are not allowed to delete this post');
     await postsServices.deletePost(post);
     res.status(200).json({ message: 'Post has been deleted successfully' });
   } catch (err) {
@@ -112,7 +112,7 @@ const deleteComment = async (req, res, next) => {
       await post.save();
       res.status(200).json({ message: 'Comment has been deleted successfully.', comments: post.comments });
     } else {
-      throw createError(401, 'Comments can only be deleted by their owner or the owner of the post.');
+      throw createError(403, 'Comments can only be deleted by their owner or the owner of the post.');
     }
   } catch (err) {
     return next(err);
