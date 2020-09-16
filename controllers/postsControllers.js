@@ -18,7 +18,7 @@ const getPosts = async (req, res, next) => {
 const getPostById = async (req, res, next) => {
   const { postId } = req.params;
   try {
-    const post = await postsServices.getPostById(postId);
+    const post = await postsServices.getPostById(postId, 'user', 'nickname avatar');
     if (!post) throw createError(400, 'This post does not exist.');
     res.status(200).json({ post });
   } catch (err) {
@@ -27,7 +27,7 @@ const getPostById = async (req, res, next) => {
 };
 
 const createPost = async (req, res, next) => {
-  const { text, imageUrl } = req.body;
+  const { text } = req.body;
   const { user } = req;
 
   try {
@@ -39,7 +39,6 @@ const createPost = async (req, res, next) => {
     const post = {
       user: user.id,
       text,
-      imageUrl,
     };
 
     const createdPost = await postsServices.createPost(post, existingUser);

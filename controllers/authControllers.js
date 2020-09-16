@@ -114,7 +114,7 @@ const signUp = async (req, res, next) => {
 const loadUser = async (req, res, next) => {
   const { id } = req.user;
   try {
-    const user = await authServices.getUserById(id, 'avatar nickname'); // change: - profile, moments, posts, createdAt, updatedAt (only avatar and nickname)
+    const user = await authServices.getUserById(id, 'avatar nickname');
     res.status(200).json({ user });
   } catch (err) {
     return next(err);

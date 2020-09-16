@@ -7,8 +7,8 @@ const usersControllers = require('../../controllers/usersControllers');
 router.use(isAuthorized);
 
 // Private Routes
-// router.get('/search/:query', userControllers.getUsersByNickname);
-// router.get('/:id', userControllers.getUserById);
+router.get('/search/:query', usersControllers.getUsersByNickname);
+router.get('/:id', usersControllers.getUserById);
 
 // Profile Routes
 router.put('/profile', usersControllers.updateProfile);

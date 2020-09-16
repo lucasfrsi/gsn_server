@@ -5,11 +5,11 @@ const { createError } = require('../middleware/helpers/error');
 const usersServices = require('../services/usersServices');
 
 const getUsersByNickname = async (req, res, next) => {
-  const { query } = req.params;
-  console.log(query);
+  let { query } = req.params;
+  query = query.trim();
   if (!query) return next();
   try {
-    const users = await usersServices.getUsers({ nickname: { $regex: query, $options: 'i' } });
+    const users = await usersServices.getUsers({ nickname: { $regex: query, $options: 'i' } }, 'nickname avatar profile.personalData.realName', 4);
     res.status(200).json(users);
   } catch (err) {
     return next(err);
@@ -19,8 +19,8 @@ const getUsersByNickname = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = await usersServices.getUserById(id);
-    res.status(200).json(user);
+    const user = await usersServices.getUserById(id, 'moments posts');
+    res.status(200).json({ user });
   } catch (err) {
     return next(err);
   }

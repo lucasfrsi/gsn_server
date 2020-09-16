@@ -2,9 +2,9 @@ const { createError } = require('../middleware/helpers/error');
 
 const User = require('../models/User');
 
-const getUsers = async (query, select) => {
+const getUsers = async (query, select, limit) => {
   try {
-    const users = await User.find(query).select(select);
+    const users = await User.find(query).select(select).limit(limit);
     return users;
   } catch (err) {
     console.error(err);
@@ -22,9 +22,9 @@ const getUserBy = async (query, select) => {
   }
 };
 
-const getUserById = async (query) => {
+const getUserById = async (query, populateParams) => {
   try {
-    const user = await User.findById(query);
+    const user = await User.findById(query).populate(populateParams);
     return user;
   } catch (err) {
     console.error(err);
