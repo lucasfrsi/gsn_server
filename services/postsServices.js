@@ -94,6 +94,16 @@ const changePostLike = async (post, likeType, userId) => {
   }
 };
 
+const editPost = async (post) => {
+  try {
+    await post.save();
+    return post;
+  } catch (err) {
+    console.error(err);
+    throw createError(500, 'Something went wrong while updating this post, try again later.');
+  }
+};
+
 exports.getPosts = getPosts;
 exports.getPostById = getPostById;
 exports.createPost = createPost;
@@ -101,3 +111,4 @@ exports.deletePost = deletePost;
 exports.addLikeToPost = addLikeToPost;
 exports.deletePostLike = deletePostLike;
 exports.changePostLike = changePostLike;
+exports.editPost = editPost;

@@ -23,6 +23,9 @@ const userSchema = new Schema({
     type: String,
   },
   profile: {
+    cover: {
+      type: String,
+    },
     personalData: {
       realName: {
         type: String,

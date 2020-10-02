@@ -11,6 +11,7 @@ router.use(isAuthorized);
 
 // Private Routes
 router.post('/', postsControllers.createPost);
+router.put('/:postId', postsControllers.editPost);
 router.delete('/:postId', postsControllers.deletePost);
 
 router.get('/', postsControllers.getPosts);

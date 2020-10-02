@@ -158,6 +158,31 @@ const likePost = async (req, res, next) => {
   }
 };
 
+const editPost = async (req, res, next) => {
+  const { text } = req.body;
+  const { postId } = req.params;
+  const { user } = req;
+
+  try {
+    if (!text) throw createError(400, 'Text is required.');
+
+    const post = await postsServices.getPostById(postId);
+    if (!post) throw createError(400, 'Post does not exist, could not edit post.');
+
+    const existingUser = await usersServices.getUserById(user.id);
+    if (!existingUser) throw createError(400, 'User does not exist, could not edit this post.');
+
+    if (post.user.toString() !== user.id) throw createError(403, 'You are not allowed to edit this post');
+
+    post.text = text;
+    const updatedPost = await postsServices.editPost(post);
+
+    res.status(200).json({ message: 'Post has been updated successfully', post: updatedPost });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 exports.getPosts = getPosts;
 exports.getPostById = getPostById;
 exports.createPost = createPost;
@@ -165,3 +190,4 @@ exports.deletePost = deletePost;
 exports.createComment = createComment;
 exports.deleteComment = deleteComment;
 exports.likePost = likePost;
+exports.editPost = editPost;

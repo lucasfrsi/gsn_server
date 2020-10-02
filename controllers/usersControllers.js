@@ -26,6 +26,19 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+// [{
+//   path: 'moments',
+//   model: 'Moment',
+//   populate: {
+//     path: 'user',
+//     model: 'User',
+//     select: 'nickname avatar',
+//   },
+// }, {
+//   path: 'posts',
+//   model: 'Post',
+// }]
+
 const updateProfile = async (req, res, next) => {
   const { user } = req;
   const {

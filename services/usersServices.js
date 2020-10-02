@@ -22,9 +22,9 @@ const getUserBy = async (query, select) => {
   }
 };
 
-const getUserById = async (query, populateParams) => {
+const getUserById = async (query, ...populateParams) => {
   try {
-    const user = await User.findById(query).populate(populateParams);
+    const user = await User.findById(query).populate(...populateParams);
     return user;
   } catch (err) {
     console.error(err);
