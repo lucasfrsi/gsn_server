@@ -13,9 +13,9 @@ const getPosts = async (sort, limit) => {
   }
 };
 
-const getPostById = async (postId, populateParams, populateSubParams) => {
+const getPostById = async (postId, ...populateParams) => {
   try {
-    const post = await Post.findById(postId).populate(populateParams, populateSubParams);
+    const post = await Post.findById(postId).populate(...populateParams);
     return post;
   } catch (err) {
     console.error(err);

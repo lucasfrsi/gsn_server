@@ -18,7 +18,20 @@ const getPosts = async (req, res, next) => {
 const getPostById = async (req, res, next) => {
   const { postId } = req.params;
   try {
-    const post = await postsServices.getPostById(postId, 'user', 'nickname avatar');
+    const post = await postsServices.getPostById(postId, [{
+      path: 'user',
+      model: 'User',
+      select: 'nickname avatar',
+    },
+    {
+      path: 'comments',
+      model: 'Comment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: 'nickname avatar',
+      },
+    }]);
     if (!post) throw createError(400, 'This post does not exist.');
     res.status(200).json({ post });
   } catch (err) {
@@ -86,7 +99,22 @@ const createComment = async (req, res, next) => {
 
     await post.save();
 
-    res.status(201).json({ message: 'Comment has been created successfully.', comments: post.comments });
+    const updatedPost = await postsServices.getPostById(postId, [{
+      path: 'user',
+      model: 'User',
+      select: 'nickname avatar',
+    },
+    {
+      path: 'comments',
+      model: 'Comment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: 'nickname avatar',
+      },
+    }]);
+
+    res.status(201).json({ message: 'Comment has been created successfully.', comments: updatedPost.comments });
   } catch (err) {
     return next(err);
   }
