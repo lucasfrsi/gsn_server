@@ -1,12 +1,13 @@
+const fs = require('fs');
 const { createError } = require('../middleware/helpers/error');
 
 const momentsServices = require('../services/momentsServices');
 const usersServices = require('../services/usersServices');
 
-const REACTION_TYPES = ['like', 'love', 'wow', 'anger'];
+const REACTION_TYPES = ['grr', 'haha', 'like', 'love', 'nani', 'sob'];
 
 const createMoment = async (req, res, next) => {
-  const { title, text, imageUrl } = req.body;
+  const { title, text } = req.body;
   const userId = req.user.id;
 
   if (title.trim().length < 1 || title.trim().length > 50) return next(createError(400, 'Title must be between 1 and 50 characters.'));
@@ -26,7 +27,7 @@ const createMoment = async (req, res, next) => {
       user: userId,
       title,
       text,
-      imageUrl,
+      imageUrl: req.file.path,
     };
     createdMoment = await momentsServices.createMoment(moment, user);
   } catch (err) {
@@ -49,6 +50,11 @@ const deleteMoment = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
+
+  const imagePath = moment.imageUrl;
+  fs.unlink(imagePath, (err) => {
+    console.error(err);
+  });
 
   res.status(200).json({ message: 'Moment has been deleted successfully' });
 };

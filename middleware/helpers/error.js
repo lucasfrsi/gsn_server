@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 class CustomError extends Error {
   constructor(statusCode, message) {
     super(message);
@@ -10,7 +12,13 @@ const createError = (statusCode, message) => {
   return error;
 };
 
-const handleError = (err, res, next) => {
+const handleError = (err, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (error) => {
+      console.error(error);
+    });
+  }
+
   if (res.headersSent) {
     return next(err);
   }

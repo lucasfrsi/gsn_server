@@ -40,7 +40,7 @@ app.use(() => {
 
 // Custom Error Handler Middleware
 app.use((err, req, res, next) => {
-  handleError(err, res, next);
+  handleError(err, req, res, next);
 });
 
 // Connect to MongoDB Atlas, if successful then the server listen for connections
