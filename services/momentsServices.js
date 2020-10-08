@@ -22,9 +22,9 @@ const createMoment = async (moment, user) => {
   }
 };
 
-const getMomentById = async (momentId, populateParams, populateSubParams) => {
+const getMomentById = async (momentId, ...populateParams) => {
   try {
-    const moment = await Moment.findById(momentId).populate(populateParams, populateSubParams);
+    const moment = await Moment.findById(momentId).populate(...populateParams);
     return moment;
   } catch (err) {
     console.error(err);
@@ -84,9 +84,9 @@ const changeMomentReaction = async (moment, reactionType, userId) => {
   }
 };
 
-const getMoments = async (sort, limit) => {
+const getMoments = async (sort, limit, ...populateParams) => {
   try {
-    const moments = await Moment.find({}).sort(sort).limit(limit);
+    const moments = await Moment.find({}).sort(sort).limit(limit).populate(...populateParams);
     return moments;
   } catch (err) {
     console.error(err);

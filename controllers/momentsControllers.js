@@ -69,7 +69,7 @@ const reactMoment = async (req, res, next) => {
   try {
     if (!reactionType) throw createError(400, 'No reaction type attached to the request.');
     if (!REACTION_TYPES.includes(reactionType)) throw createError(400, 'There is no such reaction type.');
-    moment = await momentsServices.getMomentById(momentId);
+    moment = await momentsServices.getMomentById(momentId, 'user', 'nickname avatar');
     if (!moment) throw createError(400, 'Moment does not exist, could not react to this moment.');
     const existingReaction = moment.reactions.filter((reaction) => reaction.user.toString() === user.id);
 
@@ -99,7 +99,7 @@ const reactMoment = async (req, res, next) => {
 const getMoments = async (req, res, next) => {
   let moments;
   try {
-    moments = await momentsServices.getMoments('-createdAt', 3);
+    moments = await momentsServices.getMoments('-createdAt', 3, 'user', 'nickname avatar');
     res.status(200).json({ moments });
   } catch (err) {
     return next(err);
