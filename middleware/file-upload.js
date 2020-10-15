@@ -1,10 +1,12 @@
 const multer = require('multer');
 const uuid = require('uuid');
+const { createError } = require('./helpers/error');
 
 const MIME_TYPE_MAP = {
   'image/png': 'png',
   'image/jpeg': 'jpeg',
   'image/jpg': 'jpg',
+  'image/bmp': 'bmp',
 };
 
 const fileUpload = multer({
@@ -20,7 +22,7 @@ const fileUpload = multer({
   }),
   fileFilter: (req, file, cb) => {
     const isValid = !!MIME_TYPE_MAP[file.mimetype];
-    const error = isValid ? null : new Error('Invalid mime type!');
+    const error = isValid ? null : createError(400, 'Only image extensions are allowed.');
     cb(error, isValid);
   },
 });

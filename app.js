@@ -1,4 +1,5 @@
 require('dotenv').config({ path: './config/.env' });
+const path = require('path');
 const express = require('express');
 const connectDB = require('./config/connectDB');
 const { createError, handleError } = require('./middleware/helpers/error');
@@ -13,6 +14,9 @@ const app = express();
 
 // Initialize Express "body-parser" Middleware
 app.use(express.json());
+
+// Middleware to serve files
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 // Set Headers and allow CORS
 app.use((req, res, next) => {
