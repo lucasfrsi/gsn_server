@@ -3,9 +3,9 @@ const { createError } = require('../middleware/helpers/error');
 
 const Post = require('../models/Post');
 
-const getPosts = async (sort, limit) => {
+const getPosts = async (sort, limit, ...populateParams) => {
   try {
-    const posts = await Post.find({}).sort(sort).limit(limit);
+    const posts = await Post.find({}).sort(sort).limit(limit).populate(...populateParams);
     return posts;
   } catch (err) {
     console.error(err);

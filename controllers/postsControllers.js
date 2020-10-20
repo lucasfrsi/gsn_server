@@ -7,7 +7,7 @@ const LIKE_TYPES = ['like', 'dislike'];
 
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await postsServices.getPosts('-createdAt', 1);
+    const posts = await postsServices.getPosts('-createdAt', 20, 'user');
     if (!posts) throw createError(400, 'No posts were found.');
     res.status(200).json({ posts });
   } catch (err) {
