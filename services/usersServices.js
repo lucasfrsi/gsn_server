@@ -53,8 +53,21 @@ const updateProfile = async (id, update, options) => {
   }
 };
 
+const getRandomUser = async () => {
+  try {
+    const count = await User.countDocuments({});
+    const randomNumber = Math.floor(Math.random() * count);
+    const randomUser = await User.find().limit(1).skip(randomNumber);
+    return randomUser;
+  } catch (err) {
+    console.error(err);
+    throw createError(500, 'Something went wrong while fetching a random user, try again later.');
+  }
+};
+
 exports.getUsers = getUsers;
 exports.getUserBy = getUserBy;
 exports.getUserById = getUserById;
 exports.createUser = createUser;
 exports.updateProfile = updateProfile;
+exports.getRandomUser = getRandomUser;

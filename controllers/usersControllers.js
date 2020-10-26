@@ -119,7 +119,17 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+const getRandomUser = async (req, res, next) => {
+  try {
+    const randomUser = await usersServices.getRandomUser();
+    res.status(200).json({ randomUser });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 // Exports
 exports.getUsersByNickname = getUsersByNickname;
 exports.getUserById = getUserById;
 exports.updateProfile = updateProfile;
+exports.getRandomUser = getRandomUser;

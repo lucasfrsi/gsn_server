@@ -99,7 +99,7 @@ const reactMoment = async (req, res, next) => {
 const getMoments = async (req, res, next) => {
   let moments;
   try {
-    moments = await momentsServices.getMoments('-createdAt', 3, 'user', 'nickname avatar');
+    moments = await momentsServices.getMoments('-createdAt', 20, 'user', 'nickname avatar');
     res.status(200).json({ moments });
   } catch (err) {
     return next(err);

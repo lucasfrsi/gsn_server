@@ -33,22 +33,30 @@ const userSchema = new Schema({
       location: {
         type: String,
       },
-      bio: {
-        type: String,
-      },
     },
     gamerData: {
       kind: {
         type: String,
       },
       platforms: {
-        type: [String],
-      },
-      gameMode: {
-        type: [String],
-      },
-      payModel: {
-        type: [String],
+        nintendoswitch: {
+          type: String,
+        },
+        playstation: {
+          type: String,
+        },
+        xbox: {
+          type: String,
+        },
+        epicgames: {
+          type: String,
+        },
+        steam: {
+          type: String,
+        },
+        discord: {
+          type: String,
+        },
       },
       genres: {
         type: [String],
@@ -62,9 +70,6 @@ const userSchema = new Schema({
         },
       },
       bio: {
-        type: String,
-      },
-      firstGame: {
         type: String,
       },
       favoriteGame: {
