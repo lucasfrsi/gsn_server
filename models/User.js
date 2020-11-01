@@ -72,9 +72,6 @@ const userSchema = new Schema({
       bio: {
         type: String,
       },
-      favoriteGame: {
-        type: String,
-      },
     },
     social: {
       facebook: {

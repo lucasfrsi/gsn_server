@@ -1,4 +1,5 @@
 const normalize = require('normalize-url');
+const fs = require('fs');
 
 const { createError } = require('../middleware/helpers/error');
 
@@ -128,8 +129,62 @@ const getRandomUser = async (req, res, next) => {
   }
 };
 
+const updateAvatar = async (req, res, next) => {
+  const userId = req.user.id;
+  let user;
+
+  try {
+    user = await usersServices.getUserById({ _id: userId });
+    if (!user) throw createError(400, 'User does not exist, could not update avatar.');
+    if (user.id !== userId) throw createError(403, 'You are not allowed to do this.');
+
+    const avatarPath = user.avatar;
+
+    if (avatarPath) {
+      fs.unlink(avatarPath, (err) => {
+        console.error(err);
+      });
+    }
+
+    user.avatar = req.file.path;
+    await user.save();
+
+    res.status(200).json({ message: 'User avatar has been updated successfully.', user });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const updateCover = async (req, res, next) => {
+  const userId = req.user.id;
+  let user;
+
+  try {
+    user = await usersServices.getUserById({ _id: userId });
+    if (!user) throw createError(400, 'User does not exist, could not update cover.');
+    if (user.id !== userId) throw createError(403, 'You are not allowed to do this.');
+
+    const avatarPath = user.profile.cover;
+
+    if (avatarPath) {
+      fs.unlink(avatarPath, (err) => {
+        console.error(err);
+      });
+    }
+
+    user.profile.cover = req.file.path;
+    await user.save();
+
+    res.status(200).json({ message: 'User cover has been updated successfully.', user });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 // Exports
 exports.getUsersByNickname = getUsersByNickname;
 exports.getUserById = getUserById;
 exports.updateProfile = updateProfile;
 exports.getRandomUser = getRandomUser;
+exports.updateAvatar = updateAvatar;
+exports.updateCover = updateCover;
