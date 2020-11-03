@@ -5,6 +5,10 @@ const { createError } = require('../middleware/helpers/error');
 
 const usersServices = require('../services/usersServices');
 
+const SOCIAL = ['facebook', 'twitter', 'instagram', 'youtube', 'twitch', 'patreon'];
+const PLATFORMS = ['nintendoswitch', 'playstation', 'xbox', 'epicgames', 'steam', 'discord'];
+const GENRES = ['action', 'adventure', 'rpg', 'simulation', 'strategy', 'sports', 'mmo', 'card', 'fighting', 'platform'];
+
 const getUsersByNickname = async (req, res, next) => {
   let { query } = req.params;
   query = query.trim();
@@ -41,80 +45,47 @@ const getUserById = async (req, res, next) => {
 // }]
 
 const updateProfile = async (req, res, next) => {
-  const { user } = req;
-  const {
-    avatar,
-    realName,
-    location,
-    bio,
-    kind,
-    platforms,
-    gameMode,
-    payModel,
-    genres,
-    streamer,
-    link,
-    gamerBio,
-    firstGame,
-    favoriteGame,
-    facebook,
-    twitter,
-    instagram,
-    youtube,
-    twitch,
-    patreon,
-  } = req.body;
+  const { userId } = req.user.id;
+  let user;
 
-  const newProfile = {
-    avatar,
-    profile: {
-      personalData: {
-        realName,
-        location,
-        bio,
-      },
-      gamerData: {
-        kind,
-        platforms,
-        gameMode,
-        payModel,
-        genres,
-        twitchChannel: {
-          streamer,
-          link,
-        },
-        bio: gamerBio,
-        firstGame,
-        favoriteGame,
-      },
-      social: {
-        facebook,
-        twitter,
-        instagram,
-        youtube,
-        twitch,
-        patreon,
-      },
+  const { profile } = req.body.profile;
+
+  const {
+    personalData: {
+      realName,
+      location,
     },
-  };
+    gamerData: {
+      kind, // check if casual OR pro, else return ERROR
+      platforms, // check if nintendoswitch, playstation, xbox, epicgames, steam or discord, else return ERROR
+      genres, // check available genres, else return ERROR
+      twitchChannel: {
+        streamer, // true or false ONLY, else error
+        link, // twitch channel name
+      },
+      bio, // limit to 250 characters
+    },
+    social, // check if facebook, twitter, instagram, youtube, twitch or patreon, else return ERROR
+  } = profile;
 
   try {
+    user = await usersServices.getUserById({ _id: userId });
+    if (!user) throw createError(400, 'User does not exist, could not update profile.');
+    if (user.id !== userId) throw createError(403, 'You are not allowed to do this.');
+
     // VALIDATE: kind, platforms, gameMode and payModel fields (also streamer)
     // field: Array.isArray(field) ? field : field.split(',').map((field) => ' ' + field.trim())
 
     // Normalize All Links
-    if (avatar && avatar.length > 0) newProfile.avatar = normalize(avatar, { forceHttps: true });
 
-    if (link && link.length > 0) newProfile.profile.gamerData.twitchChannel[link] = normalize(link, { forceHttps: true });
-
-    Object.entries(newProfile.profile.social).forEach(([key, value]) => {
-      if (value && value.length > 0) newProfile.profile.social[key] = normalize(value, { forceHttps: true });
-    });
+    // Object.entries(social).forEach(([key, value]) => {
+    //   if (SOCIAL.includes(social[key]) && value && value.length > 0) social[key] = normalize(value, { forceHttps: true });
+    // });
 
     // Supposing everything is ok, insert to DB
-    const updatedProfile = await usersServices.updateProfile(user.id, newProfile, { new: true });
+    // const updatedProfile = await usersServices.updateProfile(user.id, newProfile, { new: true });
 
-    res.status(200).json({ message: 'User profile has been updated successfully.', updatedProfile });
+    res.status(200).json({ message: 'User profile has been updated successfully.', updatedProfile: user });
   } catch (err) {
     return next(err);
   }
@@ -149,7 +120,7 @@ const updateAvatar = async (req, res, next) => {
     user.avatar = req.file.path;
     await user.save();
 
-    res.status(200).json({ message: 'User avatar has been updated successfully.', user });
+    res.status(200).json({ message: 'User avatar has been updated successfully.', avatar: user.avatar });
   } catch (err) {
     return next(err);
   }
@@ -175,7 +146,7 @@ const updateCover = async (req, res, next) => {
     user.profile.cover = req.file.path;
     await user.save();
 
-    res.status(200).json({ message: 'User cover has been updated successfully.', user });
+    res.status(200).json({ message: 'User cover has been updated successfully.', cover: user.profile.cover });
   } catch (err) {
     return next(err);
   }

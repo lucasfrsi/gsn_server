@@ -13,7 +13,6 @@ router.get('/:id', usersControllers.getUserById);
 
 // Profile Routes
 router.put('/profile', usersControllers.updateProfile);
-
 router.put('/avatar', fileUpload.single('image'), usersControllers.updateAvatar);
 router.put('/cover', fileUpload.single('image'), usersControllers.updateCover);
 
