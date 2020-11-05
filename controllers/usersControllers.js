@@ -8,6 +8,12 @@ const usersServices = require('../services/usersServices');
 const SOCIAL = ['facebook', 'twitter', 'instagram', 'youtube', 'twitch', 'patreon'];
 const PLATFORMS = ['nintendoswitch', 'playstation', 'xbox', 'epicgames', 'steam', 'discord'];
 const GENRES = ['action', 'adventure', 'rpg', 'simulation', 'strategy', 'sports', 'mmo', 'card', 'fighting', 'platform'];
+const KIND = ['casual', 'pro', ''];
+
+const isObject = (obj) => {
+  const type = typeof obj;
+  return type === 'function' || type === 'object' && !!obj;
+};
 
 const getUsersByNickname = async (req, res, next) => {
   let { query } = req.params;
@@ -45,46 +51,78 @@ const getUserById = async (req, res, next) => {
 // }]
 
 const updateProfile = async (req, res, next) => {
-  const { userId } = req.user.id;
-  let user;
-
-  const { profile } = req.body.profile;
-
-  const {
-    personalData: {
-      realName,
-      location,
-    },
-    gamerData: {
-      kind, // check if casual OR pro, else return ERROR
-      platforms, // check if nintendoswitch, playstation, xbox, epicgames, steam or discord, else return ERROR
-      genres, // check available genres, else return ERROR
-      twitchChannel: {
-        streamer, // true or false ONLY, else error
-        link, // twitch channel name
-      },
-      bio, // limit to 250 characters
-    },
-    social, // check if facebook, twitter, instagram, youtube, twitch or patreon, else return ERROR
-  } = profile;
+  const userId = req.user.id;
 
   try {
-    user = await usersServices.getUserById({ _id: userId });
+    if (!req.body.profile) throw createError(400, 'Invalid data.');
+    if (!isObject(req.body.profile)) throw createError(400, 'Invalid data.');
+
+    const {
+      realName,
+      location,
+      kind,
+      platforms,
+      genres,
+      streamer,
+      link,
+      bio,
+      social,
+    } = req.body.profile;
+
+    const user = await usersServices.getUserById({ _id: userId });
     if (!user) throw createError(400, 'User does not exist, could not update profile.');
-    if (user.id !== userId) throw createError(403, 'You are not allowed to do this.');
 
-    // VALIDATE: kind, platforms, gameMode and payModel fields (also streamer)
-    // field: Array.isArray(field) ? field : field.split(',').map((field) => ' ' + field.trim())
+    // Data Validation
 
-    // Normalize All Links
+    if (typeof realName !== 'string') throw createError(400, 'Invalid data. (realName)');
 
-    // Object.entries(social).forEach(([key, value]) => {
-    //   if (SOCIAL.includes(social[key]) && value && value.length > 0) social[key] = normalize(value, { forceHttps: true });
-    // });
+    if (typeof location !== 'string') throw createError(400, 'Invalid data. (location)');
 
-    // Supposing everything is ok, insert to DB
-    // const updatedProfile = await usersServices.updateProfile(user.id, newProfile, { new: true });
+    if (typeof kind !== 'string') throw createError(400, 'Invalid data. (kind)');
+    if (KIND.includes(kind) === false) throw createError(400, 'Invalid data. (kind type)');
 
+    if (!isObject(platforms)) throw createError(400, 'Invalid data. (platforms)');
+    Object.entries(platforms).forEach(([key, value]) => {
+      if (PLATFORMS.includes(key) === false) throw createError(400, 'Invalid data. (platform type)');
+    });
+
+    if (!Array.isArray(genres)) throw createError(400, 'Invalid data. (genres)');
+    genres.forEach((genre) => {
+      if (GENRES.includes(genre) === false) throw createError(400, 'Invalid data. (genre types)');
+    });
+
+    if (typeof streamer !== 'boolean') throw createError(400, 'Invalid data. (streamer)');
+
+    if (typeof link !== 'string') throw createError(400, 'Invalid data. (link)');
+
+    if (typeof bio !== 'string') throw createError(400, 'Invalid data. (bio)');
+    if (bio.length > 250) throw createError(400, 'Invalid data. (bio char exceeded, max 250)');
+
+    if (!isObject(social)) throw createError(400, 'Invalid data. (social)');
+    Object.entries(social).forEach(([key, value]) => {
+      if (SOCIAL.includes(key) === false) throw createError(400, 'Invalid data. (social type)');
+      if (value && value.length > 0) social[key] = normalize(value, { forceHttps: true });
+    });
+
+    user.profile.personalData = {
+      realName,
+      location,
+    };
+
+    user.profile.gamerData = {
+      kind,
+      platforms,
+      genres,
+      twitchChannel: {
+        streamer,
+        link,
+      },
+      bio,
+    };
+
+    user.profile.social = social;
+
+    await user.save();
     res.status(200).json({ message: 'User profile has been updated successfully.', updatedProfile: user });
   } catch (err) {
     return next(err);
