@@ -58,15 +58,29 @@ const updateProfile = async (req, res, next) => {
     if (!isObject(req.body.profile)) throw createError(400, 'Invalid data.');
 
     const {
-      realName,
-      location,
-      kind,
-      platforms,
-      genres,
-      streamer,
-      link,
-      bio,
-      social,
+      realName = '',
+      location = '',
+      kind = '',
+      platforms = {
+        nintendoswitch: '',
+        playstation: '',
+        xbox: '',
+        epicgames: '',
+        steam: '',
+        discord: '',
+      },
+      genres = [],
+      streamer = false,
+      link = '',
+      bio = '',
+      social = {
+        facebook: '',
+        twitter: '',
+        instagram: '',
+        youtube: '',
+        twitch: '',
+        patreon: '',
+      },
     } = req.body.profile;
 
     const user = await usersServices.getUserById({ _id: userId });
