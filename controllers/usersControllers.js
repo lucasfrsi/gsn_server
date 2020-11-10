@@ -137,7 +137,7 @@ const updateProfile = async (req, res, next) => {
     user.profile.social = social;
 
     await user.save();
-    res.status(200).json({ message: 'User profile has been updated successfully.', updatedProfile: user });
+    res.status(200).json({ message: 'User profile has been updated successfully.', updatedProfile: user.profile });
   } catch (err) {
     return next(err);
   }
