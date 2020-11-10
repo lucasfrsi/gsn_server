@@ -29,33 +29,42 @@ const userSchema = new Schema({
     personalData: {
       realName: {
         type: String,
+        default: '',
       },
       location: {
         type: String,
+        default: '',
       },
     },
     gamerData: {
       kind: {
         type: String,
+        default: '',
       },
       platforms: {
         nintendoswitch: {
           type: String,
+          default: '',
         },
         playstation: {
           type: String,
+          default: '',
         },
         xbox: {
           type: String,
+          default: '',
         },
         epicgames: {
           type: String,
+          default: '',
         },
         steam: {
           type: String,
+          default: '',
         },
         discord: {
           type: String,
+          default: '',
         },
       },
       genres: {
@@ -64,33 +73,42 @@ const userSchema = new Schema({
       twitchChannel: {
         streamer: {
           type: Boolean,
+          default: false,
         },
         link: {
           type: String,
+          default: '',
         },
       },
       bio: {
         type: String,
+        default: '',
       },
     },
     social: {
       facebook: {
         type: String,
+        default: '',
       },
       twitter: {
         type: String,
+        default: '',
       },
       instagram: {
         type: String,
+        default: '',
       },
       youtube: {
         type: String,
+        default: '',
       },
       twitch: {
         type: String,
+        default: '',
       },
       patreon: {
         type: String,
+        default: '',
       },
     },
   },
