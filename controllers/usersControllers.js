@@ -101,9 +101,11 @@ const updateProfile = async (req, res, next) => {
     });
 
     if (!Array.isArray(genres)) throw createError(400, 'Invalid data. (genres)');
-    genres.forEach((genre) => {
-      if (GENRES.includes(genre) === false) throw createError(400, 'Invalid data. (genre types)');
-    });
+    if (genres.length > 0) {
+      genres.forEach((genre) => {
+        if (GENRES.includes(genre) === false) throw createError(400, 'Invalid data. (genre types)');
+      });
+    }
 
     if (typeof streamer !== 'boolean') throw createError(400, 'Invalid data. (streamer)');
 
