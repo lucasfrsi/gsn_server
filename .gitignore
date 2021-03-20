@@ -1,11 +1,5 @@
-# Project Notes
-notes.txt
-
-# Dependency Directory
+# Dependencies Directory
 node_modules/
 
 # Environment Variables File
 .env
-
-# Image uploads
-uploads/
