@@ -53,7 +53,7 @@ const deleteMoment = async (req, res, next) => {
 
   const imagePath = moment.imageUrl;
   fs.unlink(imagePath, (err) => {
-    console.error(err);
+    if (err) console.error(err);
   });
 
   res.status(200).json({ message: 'Moment has been deleted successfully' });
@@ -110,3 +110,5 @@ exports.createMoment = createMoment;
 exports.deleteMoment = deleteMoment;
 exports.reactMoment = reactMoment;
 exports.getMoments = getMoments;
+
+// On delete, error if there's no image url file

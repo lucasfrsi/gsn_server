@@ -21,10 +21,12 @@ const userSchema = new Schema({
   },
   avatar: {
     type: String,
+    default: '',
   },
   profile: {
     cover: {
       type: String,
+      default: '',
     },
     personalData: {
       realName: {

@@ -4,6 +4,7 @@ const express = require('express');
 const connectDB = require('./config/connectDB');
 const { createError, handleError } = require('./middleware/helpers/error');
 
+// Routes Require
 const authRoutes = require('./routes/api/authRoutes');
 const usersRoutes = require('./routes/api/usersRoutes');
 const momentsRoutes = require('./routes/api/momentsRoutes');
