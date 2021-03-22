@@ -207,6 +207,16 @@ const updateCover = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  const userId = req.user.id;
+  try {
+    await usersServices.deleteUser(userId);
+    res.status(200).json({ message: 'User deleted successfully.' })
+  } catch (err) {
+    return next(err);
+  }
+};
+
 // Exports
 exports.getUsersByNickname = getUsersByNickname;
 exports.getUserById = getUserById;
@@ -214,3 +224,4 @@ exports.updateProfile = updateProfile;
 exports.getRandomUser = getRandomUser;
 exports.updateAvatar = updateAvatar;
 exports.updateCover = updateCover;
+exports.deleteUser = deleteUser;
