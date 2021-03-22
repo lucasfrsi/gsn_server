@@ -12,6 +12,7 @@ const KIND = ['casual', 'pro', ''];
 
 const isObject = (obj) => {
   const type = typeof obj;
+  // eslint-disable-next-line no-mixed-operators
   return type === 'function' || type === 'object' && !!obj;
 };
 
@@ -96,7 +97,7 @@ const updateProfile = async (req, res, next) => {
     if (KIND.includes(kind) === false) throw createError(400, 'Invalid data. (kind type)');
 
     if (!isObject(platforms)) throw createError(400, 'Invalid data. (platforms)');
-    Object.entries(platforms).forEach(([key, value]) => {
+    Object.entries(platforms).forEach(([key]) => {
       if (PLATFORMS.includes(key) === false) throw createError(400, 'Invalid data. (platform type)');
     });
 
