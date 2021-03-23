@@ -1,7 +1,7 @@
 {
   "name": "gsn_server",
-  "version": "1.0.0",
-  "description": "Backend to the social network web application for gamers",
+  "version": "1.0.1",
+  "description": "GamersX server",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
